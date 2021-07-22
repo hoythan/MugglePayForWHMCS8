@@ -22,6 +22,8 @@ English | [简体中文](./readme-zh-CN.md)
 ![image.png](https://i.loli.net/2021/07/19/RAE4xvd9m8lP6wa.png)
 
 # Changelog
+## 1.0.2 ##
+1. Cancel automatic payment redirection, it is now an optional configuration item
 ## 1.0.1 ##
 1. Allow custom payment methods
 2. Add JS URLSearchParams polyfill

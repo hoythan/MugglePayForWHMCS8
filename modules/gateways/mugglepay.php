@@ -37,6 +37,11 @@ function mugglepay_config()
             ),
             'Description' => '<br>The currency in which you wish to price your merchandise; used to define price parameter.',
         ),
+        'mp_pay_auto_redirect' => array(
+            'FriendlyName' => 'Automatic Redirect Payment URL',
+            'Type' => 'yesno',
+            'Description' => '<br>是否在创建支付订单后,自动重定向到 MugglePay 支付页面而不是订单详情页,勾选将自动跳转<br>请注意如果开启自动跳转,用户可能在续费支付时直接进入支付页面从而无法选择其他支付方式',
+        ),
         'mp_pay_currency' => array(
             'FriendlyName' => 'Pay Currency',
             'Description' => 'Set the MugglePay default payment gateway',
@@ -142,20 +147,27 @@ function mugglepay_link($params)
                 default:
                     $lang = $params["clientdetails"]["language"] === 'chinese' ? 'zh' : 'en';
                     $raw_response->payment_url .= '&lang=' . $lang;
-                    return <<<EOT
-                        <script>
-                            $(document).ready(function() {
-                                setTimeout(function() {
-                                    window.location = "{$raw_response->payment_url}";
-                                }, 1000)
-                            })
-                        </script>
+
+                    $html = '';
+                    if( $params['mp_pay_auto_redirect']  === 'on' ) { 
+                        $html = <<<HTML
+                            <script>
+                                $(document).ready(function() {
+                                    setTimeout(function() {
+                                        window.location = "{$raw_response->payment_url}";
+                                    }, 1000)
+                                })
+                            </script>
+                        HTML;
+                    }
+                    $html .= <<<HTML
                         <form action="viewinvoice.php?id={$params["invoiceid"]}" method="POST" enctype="text/plain">
                             <a href="{$raw_response->payment_url}" class="btn btn-primary btn-sm btn-block spinner-on-click">
                                 {$params["langpaynow"]}
                             </a>
                         </form>
-                    EOT;
+                    HTML;
+                    return $html;
                 break;
             }
         } else {

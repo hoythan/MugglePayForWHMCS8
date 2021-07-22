@@ -23,6 +23,8 @@
 ![image.png](https://i.loli.net/2021/07/19/RAE4xvd9m8lP6wa.png)
 
 # Changelog
+## 1.0.2 ##
+1. 取消自动支付重定向,转为可选配置项
 ## 1.0.1 ##
 1. 允许自定义多个支付网关
 2. 添加 JS URLSearchParams 垫片
